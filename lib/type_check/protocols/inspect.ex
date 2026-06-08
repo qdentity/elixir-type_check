@@ -106,8 +106,12 @@ defmodule TypeCheck.Inspect do
   def inspect(type, opts = %Inspect.Opts{}) do
     type
     |> TypeCheck.Protocols.Inspect.inspect(opts)
+    |> normalize_doc()
     |> Inspect.Algebra.format(opts.width)
   end
+
+  defp normalize_doc({doc, %Inspect.Opts{}}), do: doc
+  defp normalize_doc(doc), do: doc
 
   def inspect_binary(type, opts \\ %Inspect.Opts{})
 
