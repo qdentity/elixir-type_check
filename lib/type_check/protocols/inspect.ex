@@ -57,20 +57,24 @@ end
 
 defimpl TypeCheck.Protocols.Inspect, for: Any do
   def inspect(val, opts) do
-    case val do
-      somestruct = %_struct{} ->
-        # always use 'Any' implementation rather than custom struct implementation,
-        # because custom struct implementation cannot, in general,
-        # handle types as their field values.
-        Elixir.Inspect.Any.inspect(somestruct, opts)
-
-      nonmap ->
-        Elixir.Inspect.inspect(nonmap, opts)
-    end
-
-    # Elixir.Inspect.inspect(val, [opts])
-    # Elixir.Inspect.Any.inspect(val, opts)
+    val
+    |> do_inspect(opts)
+    |> normalize_doc()
   end
+
+  defp do_inspect(somestruct = %_struct{}, opts) do
+    # always use 'Any' implementation rather than custom struct implementation,
+    # because custom struct implementation cannot, in general,
+    # handle types as their field values.
+    Elixir.Inspect.Any.inspect(somestruct, opts)
+  end
+
+  defp do_inspect(nonmap, opts) do
+    Elixir.Inspect.inspect(nonmap, opts)
+  end
+
+  defp normalize_doc({doc, %Inspect.Opts{}}), do: doc
+  defp normalize_doc(doc), do: doc
 end
 
 # Override because Stream's normal Elixir implementation messes with TypeCheck's type-inspecting.
