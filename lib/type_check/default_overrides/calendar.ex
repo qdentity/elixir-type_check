@@ -60,7 +60,7 @@ defmodule TypeCheck.DefaultOverrides.Calendar do
 
   @type microsecond() :: {non_neg_integer(), non_neg_integer()}
   @autogen_typespec false
-  @type! microsecond() :: {0..999_999, 0..6}
+  @type! microsecond() :: {non_neg_integer(), non_neg_integer()}
 
   @type! minute() :: non_neg_integer()
 

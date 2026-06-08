@@ -14,7 +14,7 @@ defmodule TypeCheck.DefaultOverrides.Calendar.ISO do
 
   @type! hour() :: 0..23
 
-  @type! microsecond() :: {0..999_999, 0..6}
+  @type! microsecond() :: {non_neg_integer(), non_neg_integer()}
 
   @type! minute() :: 0..59
 
