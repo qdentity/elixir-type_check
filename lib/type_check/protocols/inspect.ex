@@ -114,8 +114,8 @@ defmodule TypeCheck.Inspect do
     |> Inspect.Algebra.format(opts.width)
   end
 
-  defp normalize_doc({doc, %Inspect.Opts{}}), do: doc
-  defp normalize_doc(doc), do: doc
+  def normalize_doc({doc, %Inspect.Opts{}}), do: doc
+  def normalize_doc(doc), do: doc
 
   def inspect_binary(type, opts \\ %Inspect.Opts{})
 

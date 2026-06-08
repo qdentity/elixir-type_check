@@ -17,7 +17,12 @@ defmodule TypeCheck.Builtin.NamedType do
 
   def stringify_name(atom, _opts) when is_atom(atom), do: to_string(atom)
   def stringify_name(str, _opts) when is_binary(str), do: to_string(str)
-  def stringify_name(other, opts), do: TypeCheck.Protocols.Inspect.inspect(other, opts)
+
+  def stringify_name(other, opts) do
+    other
+    |> TypeCheck.Protocols.Inspect.inspect(opts)
+    |> TypeCheck.Inspect.normalize_doc()
+  end
 
   defimpl TypeCheck.Protocols.Escape do
     def escape(s) do
@@ -89,7 +94,9 @@ defmodule TypeCheck.Builtin.NamedType do
         @for.stringify_name(s.name, opts)
         |> Inspect.Algebra.glue("::")
         |> Inspect.Algebra.glue(
-          TypeCheck.Protocols.Inspect.inspect(s.type, Map.put(opts, :show_long_named_type, false))
+          s.type
+          |> TypeCheck.Protocols.Inspect.inspect(Map.put(opts, :show_long_named_type, false))
+          |> TypeCheck.Inspect.normalize_doc()
         )
         |> Inspect.Algebra.group()
       else
